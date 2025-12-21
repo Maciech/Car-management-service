@@ -15,20 +15,6 @@ public class ExpensesController {
 
     CarRepository carRepository;
 
-//    @PostMapping
-//    public ResponseEntity<?> createCarRecord(@RequestBody CarDto carDto) {
-//        CarEntity carEntity = new CarEntity();
-//        carEntity.brand = carDto.brand;
-//        carEntity.model = carDto.model;
-//        carEntity.productionYear = carDto.productionYear;
-//        carEntity.isSold = carDto.isSold;
-//        carEntity.purchasePrice = carDto.purchasePrice;
-//        carEntity.salePrice = carDto.salePrice;
-//
-//        carRepository.save(carEntity);
-//        return ResponseEntity.ok().body(carDto);
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getAllExpensesById(@PathVariable Long id) {
         return ResponseEntity.ok().body(carRepository.findAll());

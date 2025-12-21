@@ -32,4 +32,9 @@ public class CarController {
     public ResponseEntity<?> getAllCars() {
         return ResponseEntity.ok().body(carRepository.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCarDetailById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(carRepository.findById(id));
+    }
 }

@@ -22,8 +22,21 @@ public class CarEntity {
     String brand;
     String model;
     int productionYear;
+    String vinNumber;
+    int mileage;
+    int kWPower;
+    int engineCapacity;
+
+    boolean isImported;
+    boolean isDamaged;
+    int numberOfPreviousOwners;
+
+
+
     BigDecimal purchasePrice;
     BigDecimal salePrice;
     boolean isSold;
+
+
 
 }

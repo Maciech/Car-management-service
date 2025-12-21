@@ -13,11 +13,12 @@ import java.math.BigDecimal;
 @Data
 public class CarDto {
 
+    Long carId;
     String brand;
     String model;
     int productionYear;
     BigDecimal purchasePrice;
     BigDecimal salePrice;
-    boolean isSold;
+    Boolean isSold;
 
 }

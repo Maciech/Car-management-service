@@ -12,29 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CarController {
 
-    CarRepository carRepository;
+    CarService carService;
 
     @PostMapping
     public ResponseEntity<?> createCarRecord(@RequestBody CarDto carDto) {
-        CarEntity carEntity = new CarEntity();
-        carEntity.brand = carDto.brand;
-        carEntity.model = carDto.model;
-        carEntity.productionYear = carDto.productionYear;
-        carEntity.isSold = carDto.isSold;
-        carEntity.purchasePrice = carDto.purchasePrice;
-        carEntity.salePrice = carDto.salePrice;
-
-        carRepository.save(carEntity);
-        return ResponseEntity.ok().body(carDto);
+        return ResponseEntity.ok().body(carService.createCarRecord(carDto));
     }
 
     @GetMapping
     public ResponseEntity<?> getAllCars() {
-        return ResponseEntity.ok().body(carRepository.findAll());
+        return ResponseEntity.ok().body(carService.getAllCars());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCarDetailById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(carRepository.findById(id));
+        return ResponseEntity.ok().body(carService.getCarById(id));
     }
 }

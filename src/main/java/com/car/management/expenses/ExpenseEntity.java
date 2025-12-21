@@ -1,15 +1,12 @@
-package com.car.management.costs;
+package com.car.management.expenses;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.car.management.cars.CarEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -17,16 +14,19 @@ import java.util.Date;
 @Builder
 @Data
 @Entity
-public class CostsEntity {
+public class ExpenseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long expenseId;
 
     String type;
-    String model;
     Date date;
     String description;
     int amount;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id")
+    CarEntity carEntity;
 }

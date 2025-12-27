@@ -4,7 +4,6 @@ import com.car.management.expenses.ExpenseEntity;
 import com.car.management.utils.DefaultDatabaseFields;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@Builder
 @Data
 @Entity
 public class CarEntity extends DefaultDatabaseFields {

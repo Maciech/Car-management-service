@@ -20,13 +20,13 @@ public class CarTypeService {
     public Map<String, Integer> getAllBrands() {
         List<CarTypeEntity> allCarTypes = carTypeRepository.findAll();
 
-        Map<String, Integer> brandWithNumber = new HashMap();
+        Map<String, Integer> brandWithNumber = new HashMap<>();
 
         Map<String, List<CarTypeEntity>> brandWithCarTypeList = allCarTypes.stream()
                 .collect(Collectors.groupingBy(CarTypeEntity::getBrand));
-        brandWithCarTypeList.forEach((s, carTypeEntities) -> {
-            brandWithNumber.put(s, carTypeEntities.size());
-        });
+        brandWithCarTypeList.forEach((s, carTypeEntities) ->
+            brandWithNumber.put(s, carTypeEntities.size())
+        );
         return brandWithNumber;
     }
 

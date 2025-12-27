@@ -28,5 +28,5 @@ public class ExpenseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
-    CarEntity carEntity;
+    CarEntity car;
 }

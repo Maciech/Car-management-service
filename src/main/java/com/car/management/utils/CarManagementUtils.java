@@ -5,4 +5,7 @@ import java.util.Locale;
 
 public class CarManagementUtils {
 
+    public static String getSessionUser() {
+        return "Test user";
+    }
 }

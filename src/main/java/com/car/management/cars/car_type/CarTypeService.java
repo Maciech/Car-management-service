@@ -1,0 +1,38 @@
+package com.car.management.cars.car_type;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class CarTypeService {
+
+    CarTypeRepository carTypeRepository;
+
+    public Map<String, Integer> getAllBrands() {
+        List<CarTypeEntity> allCarTypes = carTypeRepository.findAll();
+
+        Map<String, Integer> brandWithNumber = new HashMap();
+
+        Map<String, List<CarTypeEntity>> brandWithCarTypeList = allCarTypes.stream()
+                .collect(Collectors.groupingBy(CarTypeEntity::getBrand));
+        brandWithCarTypeList.forEach((s, carTypeEntities) -> {
+            brandWithNumber.put(s, carTypeEntities.size());
+        });
+        return brandWithNumber;
+    }
+
+    public List<String> getAllModelsByBrand(String brand) {
+        return carTypeRepository.findAllByBrand(brand).stream()
+                .map(CarTypeEntity::getModel)
+                .toList();
+    }
+}

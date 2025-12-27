@@ -1,6 +1,6 @@
 package com.car.management.expenses;
 
-import com.car.management.cars.CarEntity;
+import com.car.management.cars.car.CarEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,5 +28,5 @@ public class ExpenseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id")
-    CarEntity carEntity;
+    CarEntity car;
 }

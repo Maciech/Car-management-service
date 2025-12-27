@@ -1,4 +1,4 @@
-package com.car.management.cars;
+package com.car.management.cars.car;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ public class CarService {
 
     public CarDto createCarRecord(CarDto carDto) {
         CarEntity carEntity = new CarEntity();
-        carEntity.brand = carDto.getBrand();
-        carEntity.model = carDto.getModel();
-        carEntity.productionYear = carDto.getProductionYear();
-        carEntity.isSold = carDto.getIsSold();
-        carEntity.purchasePrice = carDto.getPurchasePrice();
-        carEntity.salePrice = carDto.getSalePrice();
+        carEntity.setBrand(carDto.getBrand());
+        carEntity.setModel(carDto.getModel());
+        carEntity.setProductionYear(carDto.getProductionYear());
+        carEntity.setSold(carDto.getIsSold());
+        carEntity.setPurchasePrice(carDto.getPurchasePrice());
+        carEntity.setSalePrice(carDto.getSalePrice());
 
         carRepository.save(carEntity);
         carDto.setCarId(carEntity.getId());

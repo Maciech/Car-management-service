@@ -1,6 +1,6 @@
 package com.car.management.expenses;
 
-import com.car.management.cars.CarRepository;
+import com.car.management.cars.car.CarRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

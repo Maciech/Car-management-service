@@ -1,4 +1,4 @@
-package com.car.management.cars;
+package com.car.management.cars.car;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

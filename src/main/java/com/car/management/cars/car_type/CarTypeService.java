@@ -1,12 +1,8 @@
 package com.car.management.cars.car_type;
 
-import com.car.management.cars.car.CarDto;
-import com.car.management.cars.car.CarEntity;
-import com.car.management.utils.CarManagementUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -48,17 +44,10 @@ public class CarTypeService {
         if (recordAlreadyExist) {
             return null;
         }
-        setDefaultDatabaseFields(carTypeDto);
         CarTypeEntity carTypeEntity = modelMapper.map(carTypeDto, CarTypeEntity.class);
 
         carTypeRepository.save(carTypeEntity);
         carTypeDto.setCarTypeId(carTypeEntity.getCarTypeId());
         return carTypeDto;
-    }
-
-    private void setDefaultDatabaseFields(CarTypeDto carTypeDto) {
-        carTypeDto.setActive(true);
-        carTypeDto.setCreationDate(CarManagementUtils.getCurrentTime());
-        carTypeDto.setUpdateDate(CarManagementUtils.getCurrentTime());
     }
 }

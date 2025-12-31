@@ -1,6 +1,5 @@
 package com.car.management.expenses;
 
-import com.car.management.cars.car.CarRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,22 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/cars/costs")
+@RequestMapping("/api/cars/expenses")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExpensesController {
 
-    CarRepository carRepository;
+    ExpensesService expensesService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getAllExpensesById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(carRepository.findAll());
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<?> getAllExpensesById(@PathVariable Long expenseId) {
+        return ResponseEntity.ok().body(expensesService.getAllExpensesByCarId(expenseId));
     }
 
 
+    @PutMapping
+    public ResponseEntity<?> updateCarExpensesById(@RequestBody ExpenseDto expenseDto) {
+        return ResponseEntity.ok().body(expensesService.updateCarExpensesById(expenseDto));
+    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateCarExpenses(@PathVariable Long id) {
-        return ResponseEntity.ok().body(carRepository.findAll());
+    @PostMapping("/{carId}")
+    public ResponseEntity<?> createCarExpensesByCarId(@RequestBody ExpenseDto expenseDto) {
+        return ResponseEntity.ok().body(expensesService.createCarExpensesByCarId(expenseDto));
     }
 }

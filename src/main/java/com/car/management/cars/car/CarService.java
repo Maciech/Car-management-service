@@ -24,7 +24,7 @@ public class CarService {
         carEntity.setSalePrice(carDto.getSalePrice());
 
         carRepository.save(carEntity);
-        carDto.setCarId(carEntity.getId());
+        carDto.setCarId(carEntity.getCarId());
         return carDto;
     }
 

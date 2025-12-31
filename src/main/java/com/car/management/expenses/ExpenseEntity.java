@@ -1,20 +1,19 @@
 package com.car.management.expenses;
 
 import com.car.management.cars.car.CarEntity;
+import com.car.management.utils.DefaultDatabaseFields;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 @Entity
-public class ExpenseEntity {
+public class ExpenseEntity extends DefaultDatabaseFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +24,7 @@ public class ExpenseEntity {
     String description;
     int amount;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id")
+    @JoinColumn(name = "car_id", nullable = false)
     CarEntity car;
 }

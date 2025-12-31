@@ -1,25 +1,25 @@
 package com.car.management.cars.car;
 
-import com.car.management.expenses.ExpenseEntity;
 import com.car.management.utils.DefaultDatabaseFields;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@Builder
 @Data
 @Entity
 public class CarEntity extends DefaultDatabaseFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long carId;
 
     String brand;
     String model;
@@ -34,17 +34,8 @@ public class CarEntity extends DefaultDatabaseFields {
     int numberOfPreviousOwners;
     String description;
 
-
     BigDecimal purchasePrice;
     BigDecimal salePrice;
     boolean isSold;
-
-    @OneToMany(
-            mappedBy = "car",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    List<ExpenseEntity> carExpenses;
 
 }

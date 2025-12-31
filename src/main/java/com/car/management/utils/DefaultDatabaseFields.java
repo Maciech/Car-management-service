@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,7 @@ import java.util.Date;
 public class DefaultDatabaseFields {
     String createdBy;
     String updatedBy;
-    Date creationDate;
-    Date updateDate;
+    LocalDateTime creationDate;
+    LocalDateTime updateDate;
     boolean isActive;
 }

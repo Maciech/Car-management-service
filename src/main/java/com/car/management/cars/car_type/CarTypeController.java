@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/car-type")
@@ -25,5 +22,10 @@ public class CarTypeController {
     @GetMapping(value = "/{brand}")
     public ResponseEntity<?> getAllModelsByBrand(@PathVariable String brand) {
         return ResponseEntity.ok().body(carTypeService.getAllModelsByBrand(brand));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createCarRecord(@RequestBody CarTypeDto carTypeDto) {
+        return ResponseEntity.ok().body(carTypeService.createCarTypeRecord(carTypeDto));
     }
 }

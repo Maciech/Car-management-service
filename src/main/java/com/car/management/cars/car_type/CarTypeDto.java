@@ -1,10 +1,6 @@
 package com.car.management.cars.car_type;
 
 import com.car.management.utils.DefaultDatabaseFields;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -14,12 +10,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-public class CarTypeEntity extends DefaultDatabaseFields {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long carTypeId;
+public class CarTypeDto extends DefaultDatabaseFields {
 
+    Long carTypeId;
     String brand;
     String model;
     CarBody carBody;
@@ -27,6 +20,5 @@ public class CarTypeEntity extends DefaultDatabaseFields {
     BigDecimal capacity;
     Integer power;
     Drive drive;
-
 
 }

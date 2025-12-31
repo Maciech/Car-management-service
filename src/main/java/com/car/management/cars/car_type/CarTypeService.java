@@ -3,6 +3,7 @@ package com.car.management.cars.car_type;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class CarTypeService {
 
     CarTypeRepository carTypeRepository;
+    ModelMapper modelMapper;
 
     public Map<String, Integer> getAllBrands() {
         List<CarTypeEntity> allCarTypes = carTypeRepository.findAll();
@@ -34,5 +36,18 @@ public class CarTypeService {
         return carTypeRepository.findAllByBrand(brand).stream()
                 .map(CarTypeEntity::getModel)
                 .toList();
+    }
+
+    public CarTypeDto createCarTypeRecord(CarTypeDto carTypeDto) {
+        boolean recordAlreadyExist = carTypeRepository
+                .existsByBrandAndModelAndCarBody(carTypeDto.getBrand(), carTypeDto.getModel(), carTypeDto.getCarBody());
+        if (recordAlreadyExist) {
+            return null;
+        }
+        CarTypeEntity carTypeEntity = modelMapper.map(carTypeDto, CarTypeEntity.class);
+
+        carTypeRepository.save(carTypeEntity);
+        carTypeDto.setCarTypeId(carTypeEntity.getCarTypeId());
+        return carTypeDto;
     }
 }

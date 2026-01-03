@@ -14,7 +14,7 @@ public class UserController {
 
     UserService userService;
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity <?> login(@RequestBody UserDto request) {
         userService.login(request);
         return ResponseEntity.accepted().build();
@@ -23,6 +23,12 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserDto request) {
         userService.register(request);
+        return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/password-change")
+    public ResponseEntity <?> passwordChange(@RequestBody UserPassChangeDto request) {
+        userService.passwordChange(request);
         return ResponseEntity.accepted().build();
     }
 

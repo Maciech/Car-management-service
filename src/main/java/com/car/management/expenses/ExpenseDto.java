@@ -14,8 +14,10 @@ import java.util.Date;
 public class ExpenseDto {
 
     Long expenseId;
+    Long carId;
     String type;
     Date date;
     String description;
+    String payer;
     int amount;
 }

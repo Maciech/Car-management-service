@@ -25,7 +25,7 @@ public class ExpensesController {
         return ResponseEntity.ok().body(expensesService.updateCarExpensesById(expenseDto));
     }
 
-    @PostMapping("/{carId}")
+    @PostMapping
     public ResponseEntity<?> createCarExpensesByCarId(@RequestBody ExpenseDto expenseDto) {
         return ResponseEntity.ok().body(expensesService.createCarExpensesByCarId(expenseDto));
     }

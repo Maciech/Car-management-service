@@ -1,10 +1,13 @@
 package com.car.management.expenses;
 
+import com.car.management.cars.car.CarRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -14,6 +17,7 @@ import java.util.List;
 public class ExpensesService {
 
     ExpensesRepository expensesRepository;
+    CarRepository carRepository;
     ModelMapper modelMapper;
 
     public List<ExpenseEntity> getAllExpensesByCarId(Long carId) {
@@ -31,12 +35,11 @@ public class ExpensesService {
     }
 
     public ExpenseEntity createCarExpensesByCarId(ExpenseDto expenseDto) {
-        ExpenseEntity expenseEntity = expensesRepository.findById(expenseDto.getExpenseId())
-                .orElseThrow();
+        if (!carRepository.existsById(expenseDto.getCarId())) {
+            throw new EntityNotFoundException();
+        }
 
-        modelMapper.map(expenseDto, expenseEntity);
-        System.out.println(expenseEntity);
-
-        return expenseEntity;
+        ExpenseEntity expenseEntity = modelMapper.map(expenseDto, ExpenseEntity.class);
+        return expensesRepository.save(expenseEntity);
     }
 }

@@ -22,6 +22,7 @@ public class ExpenseEntity extends DefaultDatabaseFields {
     String type;
     Date date;
     String description;
+    String payer;
     int amount;
 
     @ManyToOne(fetch = FetchType.LAZY)

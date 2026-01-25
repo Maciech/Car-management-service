@@ -2,6 +2,7 @@ package com.car.management.cars.car_image;
 
 import com.car.management.cars.car.CarRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,51 +28,66 @@ public class ImageService {
     CarRepository carRepository;
     ModelMapper modelMapper;
 
+    private static final Path UPLOADS_DIR = Paths.get("uploads");
 
-    public void saveImagesByCarId(Long carId, List<MultipartFile> images) throws IOException {
+    public void saveImagesByCarId(Long carId, List<MultipartFile> images) {
+
         if (!carRepository.existsById(carId)) {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Car not found");
         }
 
-        Path baseDir = Paths.get("uploads/cars/" + carId);
-        Files.createDirectories(baseDir);
+        Path carDir = UPLOADS_DIR.resolve("cars").resolve(carId.toString());
 
+        try {
+            Files.createDirectories(carDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot create directory: " + carDir, e);
+        }
 
-        images.forEach((multipartFile) -> {
-            String filename = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
-            Path target = baseDir.resolve(filename);
-            String url = "/uploads/cars/" + carId + "/" + filename;
+        for (MultipartFile file : images) {
+            String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            Path target = carDir.resolve(filename);
+
+            // 🔥 TYLKO RELATYWNA ŚCIEŻKA
+            String url = "cars/" + carId + "/" + filename;
+
+            try {
+                file.transferTo(target);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save file", e);
+            }
 
             ImageEntity imageEntity = ImageEntity.builder()
-                    .url(url)
                     .carId(carId)
+                    .url(url)
                     .position(0)
                     .build();
 
-            try {
-                multipartFile.transferTo(target);
-                imageRepository.save(imageEntity);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+            imageRepository.save(imageEntity);
+        }
     }
 
     public List<ImageDto> getImagesByCarId(Long carId) {
-        List<ImageDto> imageDtos = imageRepository.findAllByCarId(carId).stream()
-                .map(imageEntity -> modelMapper.map(imageEntity, ImageDto.class))
+        return imageRepository.findAllByCarId(carId).stream()
+                .map(image -> {
+                    ImageDto dto = modelMapper.map(image, ImageDto.class);
+                    dto.setUrl("http://localhost:8080/uploads/" + image.getUrl());
+                    return dto;
+                })
                 .toList();
-        imageDtos.forEach(imageDto -> {
-            String url = imageDto.getUrl();
-            imageDto.setUrl("http://localhost:8080" + url);
-        });
-        return imageDtos;
-
     }
 
+    @Transactional
     public void deleteImageByImageId(Long imageId) {
-        ImageEntity imageEntity = imageRepository.findById(imageId).orElseThrow();
-        Path filePath = Paths.get("uploads").resolve(imageEntity.getUrl());
+
+        ImageEntity image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException("Image not found"));
+
+        Path filePath = UPLOADS_DIR.resolve(image.getUrl()).normalize();
+
+        if (!filePath.startsWith(UPLOADS_DIR)) {
+            throw new SecurityException("Invalid file path");
+        }
 
         try {
             Files.deleteIfExists(filePath);
@@ -79,6 +95,7 @@ public class ImageService {
             throw new RuntimeException("Failed to delete image file: " + filePath, e);
         }
 
-        imageRepository.deleteById(imageId);
+        imageRepository.delete(image);
     }
 }
+

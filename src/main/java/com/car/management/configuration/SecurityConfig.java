@@ -34,10 +34,11 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // Enable CORS support in Spring Security
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs*/**").permitAll()
-                        .requestMatchers("api/ws/**").permitAll()
+                        .requestMatchers("/api/ws/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/admin/request-template/**").authenticated()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/company-name/**").permitAll()

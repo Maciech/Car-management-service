@@ -1,6 +1,8 @@
 package com.car.management.cars.car;
 
+import com.car.management.cars.car_search.criteria_enums.CarColor;
 import com.car.management.utils.DefaultDatabaseFields;
+import com.car.management.utils.GenerateMetaModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 @Builder
 @Data
 @Entity
+@GenerateMetaModel
 public class CarEntity extends DefaultDatabaseFields {
 
     @Id
@@ -23,6 +26,7 @@ public class CarEntity extends DefaultDatabaseFields {
 
     String brand;
     String model;
+    CarColor color;
     int productionYear;
     String vinNumber;
     int mileage;
@@ -33,6 +37,7 @@ public class CarEntity extends DefaultDatabaseFields {
     boolean isDamaged;
     int numberOfPreviousOwners;
     String description;
+    String owner;
 
     BigDecimal purchasePrice;
     BigDecimal salePrice;

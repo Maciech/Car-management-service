@@ -110,6 +110,13 @@
             <version>3.2.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>7.2.5.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
 	</dependencies>
 
 	<build>
@@ -123,7 +130,18 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+
+                        <path>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-jpamodelgen</artifactId>
+                            <version>6.4.4.Final</version>
+                        </path>
 					</annotationProcessorPaths>
+
+                    <compilerArgs>
+                        <arg>-Ahibernate.jpamodelgen.ignoreNonAnnotatedClasses=true</arg>
+                    </compilerArgs>
+
 				</configuration>
 			</plugin>
 			<plugin>

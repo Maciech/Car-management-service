@@ -5,13 +5,12 @@ import com.car.management.cars.car_search.criteria_enums.CarColor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.car.management.utils.Constants.CAR_SEARCH_API;
 
@@ -44,5 +43,22 @@ public class CarSearchController {
         );
 
         return ResponseEntity.ok(carSearchService.search(criteria));
+    }
+
+    @GetMapping("/extractBrandWithAmount")
+    public ResponseEntity<Map<String, Integer>> extractBrandWithAmount() {
+        return ResponseEntity.ok().body(carSearchService.extractBrandWithAmount());
+    }
+
+    @GetMapping("/extractModelWithAmount/{brand}")
+    public ResponseEntity<Map<String, Integer>> extractModelWithAmount(@PathVariable String brand) {
+        return ResponseEntity.ok().body(carSearchService.extractModelWithAmount(brand));
+    }
+
+    @GetMapping("/extractModelWithAmount/{brand}/{model}/{minYear}/{maxYear}")
+    public ResponseEntity<Integer> extractFoundByNameNumber(@PathVariable String brand, @PathVariable String model,
+                                                            @PathVariable Integer minYear,
+                                                            @PathVariable Integer maxYear) {
+        return ResponseEntity.ok().body(carSearchService.extractFoundByNameNumber(brand, model, minYear, maxYear));
     }
 }

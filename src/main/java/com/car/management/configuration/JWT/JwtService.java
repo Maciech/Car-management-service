@@ -4,10 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -24,38 +22,23 @@ public class JwtService {
     @Value("${application.security.jwt.auth.secret-key}")
     private String secretKey;
 
-    @Autowired
-    HttpServletRequest currentRequest; // Request-scoped
-
-    public String extractUserNameFromRequest() {
-        String authHeader = currentRequest.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            return extractUserName(token);
-        }
-        return "Anonymous user";
-    }
-
-    public String extractRoleFromRequest() {
-        String authHeader = currentRequest.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            return extractRole(token);
-        }
-        return null;
-    }
-
-    public String generateToken(String username, String role) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
 
+        String role = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("USER");
+
+        // 2. Zapisujemy listę ról w mapie claims pod kluczem "roles"
+        claims.put("roles", role);
+
+        // 3. Generujemy token
         return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(username)
+                .claims(claims) // Zapisujemy nasze claimy (w tym role) w tokenie
+                .subject(userDetails.getUsername()) // Jako subject ustawiamy email/login
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MILLIS))
-                .and()
                 .signWith(getKey())
                 .compact();
     }

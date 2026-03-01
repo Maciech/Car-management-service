@@ -1,4 +1,4 @@
-package com.car.management.users.services;
+package com.car.management.users.models;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +17,11 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ADMIN"));
+        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().toString()));
+    }
+
+    public String getRole() {
+        return userEntity.getRole().toString();
     }
 
     @Override

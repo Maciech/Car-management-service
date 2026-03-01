@@ -2,7 +2,9 @@ package com.car.management.configuration;
 
 import com.car.management.configuration.JWT.JwtFilter;
 import com.car.management.users.services.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,13 +22,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private JwtFilter jwtFilter;
+    CustomUserDetailsService customUserDetailsService;
+    JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -37,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/car-search/**").permitAll()
                         .requestMatchers("/v3/api-docs*/**").permitAll()
                         .requestMatchers("/api/ws/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/admin/request-template/**").authenticated()

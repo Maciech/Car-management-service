@@ -3,6 +3,7 @@ package com.car.management.cars.car;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,18 +14,22 @@ import java.util.List;
 public class CarService {
 
     CarRepository carRepository;
+    ModelMapper modelMapper;
 
     public CarDto createCarRecord(CarDto carDto) {
-        CarEntity carEntity = new CarEntity();
-        carEntity.setBrand(carDto.getBrand());
-        carEntity.setModel(carDto.getModel());
-        carEntity.setProductionYear(carDto.getProductionYear());
-        carEntity.setSold(carDto.getIsSold());
-        carEntity.setPurchasePrice(carDto.getPurchasePrice());
-        carEntity.setSalePrice(carDto.getSalePrice());
+//        CarEntity carEntity = new CarEntity();
+        CarEntity newCar = modelMapper.map(carDto, CarEntity.class);
+//        carEntity.setBrand(carDto.getBrand());
+//        carEntity.setModel(carDto.getModel());
+//        carEntity.setProductionYear(carDto.getProductionYear());
+//        carEntity.setMileage(carDto.getMileage());
+//        carEntity.setKWPower(carDto.getKwPower());
+//        carEntity.setSold(carDto.getIsSold());
+//        carEntity.setPurchasePrice(carDto.getPurchasePrice());
+//        carEntity.setSalePrice(carDto.getSalePrice());
 
-        carRepository.save(carEntity);
-        carDto.setCarId(carEntity.getCarId());
+        carRepository.save(newCar);
+        carDto.setCarId(newCar.getCarId());
         return carDto;
     }
 

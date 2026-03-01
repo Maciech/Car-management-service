@@ -1,5 +1,8 @@
 package com.car.management.users.services;
 
+import com.car.management.users.models.UserEntity;
+import com.car.management.users.models.UserPrincipal;
+import com.car.management.users.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

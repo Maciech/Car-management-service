@@ -2,6 +2,9 @@ package com.car.management.users.services;
 
 
 import com.car.management.configuration.JWT.JwtService;
+import com.car.management.users.models.UserEntity;
+import com.car.management.users.models.UserModel;
+import com.car.management.users.repository.UserRepository;
 import com.car.management.utils.default_exceptions.EmailOrPasswordIncorrectException;
 import com.car.management.utils.default_exceptions.EntityAlreadyExistsException;
 import jakarta.transaction.Transactional;
@@ -12,8 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +33,17 @@ public class UserService {
 
     public String verifyUser(UserModel loginRequest) {
         try {
-            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
-                    loginRequest.getPassword()));
+            Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+
             if (authenticate.isAuthenticated()) {
-                return jwtService.generateToken(loginRequest.getEmail(), "USER");
+                UserDetails userDetails = (UserDetails) authenticate.getPrincipal();
+
+                return jwtService.generateToken(Objects.requireNonNull(userDetails));
             }
         } catch (AuthenticationException e) {
             throw new EmailOrPasswordIncorrectException();
@@ -47,6 +59,7 @@ public class UserService {
         UserEntity newUser = new UserEntity();
         newUser.setEmail(registerRequest.getEmail());
         newUser.setPassword(encoder.encode(registerRequest.getPassword()));
+        newUser.setRole(registerRequest.getRole());
 
         userRepository.saveAndFlush(newUser);
     }

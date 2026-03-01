@@ -1,4 +1,4 @@
-package com.car.management.users.services;
+package com.car.management.users.models;
 
 import com.car.management.utils.DefaultDatabaseFields;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import javax.management.relation.Role;
 
 @Data
 @Entity
@@ -28,6 +26,12 @@ public class UserEntity extends DefaultDatabaseFields {
     @JsonIgnore
     String password;
 
+    @EnumeratedValue
+    UserRole role;
+
+    @Column(columnDefinition = "varchar(15)")
+    String phone;
+
     @Column(columnDefinition = "varchar(50)")
-    Role role;
+    String address;
 }

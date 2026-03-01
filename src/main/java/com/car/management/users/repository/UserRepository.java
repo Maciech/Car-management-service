@@ -1,5 +1,6 @@
-package com.car.management.users.services;
+package com.car.management.users.repository;
 
+import com.car.management.users.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

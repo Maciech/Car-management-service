@@ -35,12 +35,14 @@ public class CarSearchController {
             @RequestParam(required = false) Integer minPower,
             @RequestParam(required = false) Integer maxPower,
             @RequestParam(required = false) Integer minMileage,
-            @RequestParam(required = false) Integer maxMileage
+            @RequestParam(required = false) Integer maxMileage,
+            @RequestParam(required = false) Boolean isImported,
+            @RequestParam(required = false) Boolean isDamaged
     ) {
 
         SearchCriteria criteria = new SearchCriteria(
                 brand, model, color, minPrice, maxPrice,
-                minYear, maxYear, minPower, maxPower, minMileage, maxMileage
+                minYear, maxYear, minPower, maxPower, minMileage, maxMileage, isImported, isDamaged
         );
 
         return ResponseEntity.ok(carSearchService.search(criteria));

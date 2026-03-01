@@ -1,6 +1,6 @@
 package com.car.management.users.controller;
 
-import com.car.management.users.services.UserModel;
+import com.car.management.users.models.UserModel;
 import com.car.management.users.services.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -21,5 +21,6 @@ public class SearchCriteria {
     private Integer maxPower;
     private Integer minMileage;
     private Integer maxMileage;
-
+    private Boolean isImported;
+    private Boolean isDamaged;
 }

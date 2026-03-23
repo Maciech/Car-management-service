@@ -25,7 +25,7 @@ public class CarEntity extends DefaultDatabaseFields {
     String model;
     String generation;
 
-    @EnumeratedValue
+    @Enumerated(EnumType.STRING)
     CarColor color;
     int productionYear;
     String vinNumber;

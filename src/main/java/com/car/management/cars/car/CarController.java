@@ -28,4 +28,14 @@ public class CarController {
     public ResponseEntity<?> getCarDetailById(@PathVariable Long id) {
         return ResponseEntity.ok().body(carService.getCarById(id));
     }
+
+    @GetMapping("/getAllMake")
+    public ResponseEntity<?> getAllMake() {
+        return ResponseEntity.ok().body(carService.getAllManufacturersNames());
+    }
+
+    @GetMapping("/getAllModelByMake/{make}")
+    public ResponseEntity<?> getAllModelByMake(@PathVariable String make) {
+        return ResponseEntity.ok().body(carService.getAllModelByMake(make));
+    }
 }

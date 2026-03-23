@@ -26,7 +26,7 @@ public class UserEntity extends DefaultDatabaseFields {
     @JsonIgnore
     String password;
 
-    @EnumeratedValue
+    @Enumerated(EnumType.STRING)
     UserRole role;
 
     @Column(columnDefinition = "varchar(15)")

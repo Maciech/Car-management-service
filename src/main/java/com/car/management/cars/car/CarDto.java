@@ -26,5 +26,6 @@ public class CarDto {
     Boolean isSold;
     Boolean isImported;
     Boolean isDamaged;
+    String[] images;
 
 }

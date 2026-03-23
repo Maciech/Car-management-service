@@ -1,5 +1,6 @@
 package com.car.management.cars.car;
 
+import com.car.management.cars.car_search.criteria_enums.CarColor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +18,14 @@ public class CarDto {
     String brand;
     String model;
     int productionYear;
+    int mileage;
+    int kwPower;
+    CarColor color;
     BigDecimal purchasePrice;
     BigDecimal salePrice;
     Boolean isSold;
+    Boolean isImported;
+    Boolean isDamaged;
+    String[] images;
 
 }

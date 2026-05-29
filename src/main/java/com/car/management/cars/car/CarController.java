@@ -38,4 +38,24 @@ public class CarController {
     public ResponseEntity<?> getAllModelByMake(@PathVariable String make) {
         return ResponseEntity.ok().body(carService.getAllModelByMake(make));
     }
+
+    @GetMapping("/{id}/financial-summary")
+    public ResponseEntity<?> getFinancialSummary(@PathVariable Long id) {
+        return ResponseEntity.ok().body(carService.getFinancialSummary(id));
+    }
+
+    @GetMapping("/getYearRange")
+    public ResponseEntity<?> getYearRange(
+            @RequestParam String make,
+            @RequestParam String model) {
+        return ResponseEntity.ok().body(carService.getYearRange(make, model));
+    }
+
+    @GetMapping("/getTrims")
+    public ResponseEntity<?> getTrims(
+            @RequestParam String make,
+            @RequestParam String modelLine,
+            @RequestParam int year) {
+        return ResponseEntity.ok().body(carService.getTrims(make, modelLine, year));
+    }
 }

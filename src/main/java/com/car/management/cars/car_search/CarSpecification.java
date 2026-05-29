@@ -24,6 +24,13 @@ public class CarSpecification {
                 predicates.add(cb.equal(root.get(CarEntity_.MODEL), criteria.getModel()));
             }
 
+            if (criteria.getGeneration() != null && !criteria.getGeneration().isBlank()) {
+                predicates.add(cb.like(
+                        cb.lower(root.get("generation")),
+                        "%" + criteria.getGeneration().toLowerCase() + "%"
+                ));
+            }
+
             if (criteria.getColor() != null) {
                 predicates.add(cb.equal(root.get(CarEntity_.COLOR), criteria.getColor()));
             }

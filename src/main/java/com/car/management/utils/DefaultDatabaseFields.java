@@ -41,6 +41,12 @@ public class DefaultDatabaseFields {
         updatedBy = CarManagementUtils.getSessionUser();
     }
 
+    // --- GETTERS ---
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
     // --- DOMAIN METHODS ---
 
     public void activate() {

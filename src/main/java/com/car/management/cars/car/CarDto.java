@@ -17,6 +17,7 @@ public class CarDto {
     Long carId;
     String brand;
     String model;
+    String generation;
     int productionYear;
     int mileage;
     int kwPower;
@@ -26,6 +27,7 @@ public class CarDto {
     Boolean isSold;
     Boolean isImported;
     Boolean isDamaged;
+    CarStatus status;
     String[] images;
 
 }

@@ -10,4 +10,6 @@ import java.util.List;
 public interface CarRepository extends JpaRepository<CarEntity, Long>, JpaSpecificationExecutor<CarEntity> {
 
     List<CarEntity> findAllByOwnerOrderByCreationDate(String owner);
+
+    List<CarEntity> findByUserId(Long userId);
 }

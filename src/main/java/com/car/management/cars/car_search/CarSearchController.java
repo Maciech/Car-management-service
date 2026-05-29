@@ -27,6 +27,7 @@ public class CarSearchController {
     public ResponseEntity<List<CarDto>> search(
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String model,
+            @RequestParam(required = false) String generation,
             @RequestParam(required = false) CarColor color,
             @RequestParam(required = false) Integer minPrice,
             @RequestParam(required = false) Integer maxPrice,
@@ -41,7 +42,7 @@ public class CarSearchController {
     ) {
 
         SearchCriteria criteria = new SearchCriteria(
-                brand, model, color, minPrice, maxPrice,
+                brand, model, generation, color, minPrice, maxPrice,
                 minYear, maxYear, minPower, maxPower, minMileage, maxMileage, isImported, isDamaged
         );
 

@@ -44,4 +44,7 @@ public class CarEntity extends DefaultDatabaseFields {
     BigDecimal salePrice;
     boolean isSold;
 
+    @Enumerated(EnumType.STRING)
+    CarStatus status;
+
 }

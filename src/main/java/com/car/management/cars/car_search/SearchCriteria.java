@@ -12,6 +12,7 @@ public class SearchCriteria {
 
     private String brand;
     private String model;
+    private String generation;
     private CarColor color;
     private Integer minPrice;
     private Integer maxPrice;

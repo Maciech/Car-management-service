@@ -43,8 +43,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            email = jwtService.extractUserName(token);
-
+            try {
+                email = jwtService.extractUserName(token);
+            } catch (Exception ignored) {
+                // expired or malformed token — treat as unauthenticated
+            }
         }
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);

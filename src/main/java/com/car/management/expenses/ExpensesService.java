@@ -29,9 +29,7 @@ public class ExpensesService {
                 .orElseThrow();
 
         modelMapper.map(expenseDto, expenseEntity);
-        System.out.println(expenseEntity);
-
-    return expenseEntity;
+        return expensesRepository.save(expenseEntity);
     }
 
     public ExpenseEntity createCarExpensesByCarId(ExpenseDto expenseDto) {

@@ -29,6 +29,11 @@ public class CarController {
         return ResponseEntity.ok().body(carService.getCarById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
+        return ResponseEntity.ok().body(carService.updateCar(id, carDto));
+    }
+
     @GetMapping("/getAllMake")
     public ResponseEntity<?> getAllMake() {
         return ResponseEntity.ok().body(carService.getAllManufacturersNames());

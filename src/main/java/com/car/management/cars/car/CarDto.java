@@ -18,9 +18,10 @@ public class CarDto {
     String brand;
     String model;
     String generation;
-    int productionYear;
-    int mileage;
-    int kwPower;
+    Integer productionYear;
+    Integer mileage;
+    Integer kwPower;
+    Integer engineCapacity;
     CarColor color;
     BigDecimal purchasePrice;
     BigDecimal salePrice;

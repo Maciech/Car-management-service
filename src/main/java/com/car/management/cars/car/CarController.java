@@ -34,6 +34,12 @@ public class CarController {
         return ResponseEntity.ok().body(carService.updateCar(id, carDto));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
+        carService.deleteCar(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/getAllMake")
     public ResponseEntity<?> getAllMake() {
         return ResponseEntity.ok().body(carService.getAllManufacturersNames());

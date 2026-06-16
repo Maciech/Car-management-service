@@ -84,7 +84,7 @@ public class CarService {
         return carDto;
     }
 
-    public List<CarEntity> getAllCars() {
+    public List<CarDto> getAllCars() {
         String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
         return userRepository.findByEmail(email).map(user -> {
             Long userId = user.getUserId();
@@ -95,15 +95,32 @@ public class CarService {
             Map<Long, CarEntity> result = new LinkedHashMap<>();
             carRepository.findByUserId(userId).forEach(c -> result.put(c.getCarId(), c));
             carRepository.findAllById(sharedIds).forEach(c -> result.putIfAbsent(c.getCarId(), c));
-            return new ArrayList<>(result.values());
-        }).orElseGet(() -> {
-            // użytkownik nie istnieje w DB — zwróć pustą listę (bezpieczne)
-            return new ArrayList<>();
-        });
+
+            List<CarEntity> cars = new ArrayList<>(result.values());
+            List<Long> carIds = cars.stream().map(CarEntity::getCarId).toList();
+
+            Map<Long, BigDecimal> expensesByCarId = expensesRepository.findAllByCarCarIdIn(carIds)
+                    .stream()
+                    .collect(Collectors.groupingBy(
+                            e -> e.getCar().getCarId(),
+                            Collectors.reducing(BigDecimal.ZERO, e -> BigDecimal.valueOf(e.getAmount()), BigDecimal::add)
+                    ));
+
+            return cars.stream().map(car -> {
+                CarDto dto = modelMapper.map(car, CarDto.class);
+                dto.setTotalExpenses(expensesByCarId.getOrDefault(car.getCarId(), BigDecimal.ZERO));
+                return dto;
+            }).toList();
+
+        }).orElseGet(List::of);
     }
 
     public CarEntity getCarById(Long carId) {
         return carRepository.findById(carId).orElseThrow();
+    }
+
+    public void deleteCar(Long id) {
+        carRepository.deleteById(id);
     }
 
     public CarEntity updateCar(Long id, CarDto dto) {

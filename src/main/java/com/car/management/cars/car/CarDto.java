@@ -20,9 +20,12 @@ public class CarDto {
     String generation;
     Integer productionYear;
     Integer mileage;
-    Integer kwPower;
+    Integer kWPower;
     Integer engineCapacity;
     CarColor color;
+    String vinNumber;
+    Integer numberOfPreviousOwners;
+    String description;
     BigDecimal purchasePrice;
     BigDecimal salePrice;
     Boolean isSold;
@@ -30,5 +33,6 @@ public class CarDto {
     Boolean isDamaged;
     CarStatus status;
     String[] images;
+    BigDecimal totalExpenses;
 
 }

@@ -27,15 +27,15 @@ public class CarEntity extends DefaultDatabaseFields {
 
     @Enumerated(EnumType.STRING)
     CarColor color;
-    int productionYear;
+    Integer productionYear;
     String vinNumber;
-    int mileage;
-    int kWPower;
-    int engineCapacity;
+    Integer mileage;
+    Integer kWPower;
+    Integer engineCapacity;
 
     boolean isImported;
     boolean isDamaged;
-    int numberOfPreviousOwners;
+    Integer numberOfPreviousOwners;
     String description;
     String owner;
     Long userId;

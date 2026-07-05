@@ -1,6 +1,7 @@
 package com.car.management.cars.car;
 
 import com.car.management.expenses.ExpensesRepository;
+import com.car.management.invitation.CarAccessEntity;
 import com.car.management.invitation.CarAccessRepository;
 import com.car.management.users.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -76,30 +77,63 @@ public class CarService {
 
     public CarDto createCarRecord(CarDto carDto) {
         CarEntity newCar = modelMapper.map(carDto, CarEntity.class);
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        userRepository.findByEmail(email).ifPresent(u -> newCar.setUserId(u.getUserId()));
+        String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
+        userRepository.findByEmail(email).ifPresent(u -> {
+            newCar.setUserId(u.getUserId());
+            newCar.setOwner(u.getEmail());
+        });
         carRepository.save(newCar);
         carDto.setCarId(newCar.getCarId());
         return carDto;
     }
 
-    public List<CarEntity> getAllCars() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    public List<CarDto> getAllCars() {
+        String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
         return userRepository.findByEmail(email).map(user -> {
             Long userId = user.getUserId();
 
             List<Long> sharedIds = carAccessRepository.findAllByUserId(userId)
-                    .stream().map(a -> a.getCarId()).toList();
+                    .stream().map(CarAccessEntity::getCarId).toList();
 
             Map<Long, CarEntity> result = new LinkedHashMap<>();
             carRepository.findByUserId(userId).forEach(c -> result.put(c.getCarId(), c));
             carRepository.findAllById(sharedIds).forEach(c -> result.putIfAbsent(c.getCarId(), c));
-            return new ArrayList<>(result.values());
-        }).orElseGet(() -> new ArrayList<>(carRepository.findAll())); // fallback for dev
+
+            List<CarEntity> cars = new ArrayList<>(result.values());
+            List<Long> carIds = cars.stream().map(CarEntity::getCarId).toList();
+
+            Map<Long, BigDecimal> expensesByCarId = expensesRepository.findAllByCarCarIdIn(carIds)
+                    .stream()
+                    .collect(Collectors.groupingBy(
+                            e -> e.getCar().getCarId(),
+                            Collectors.reducing(BigDecimal.ZERO, e -> BigDecimal.valueOf(e.getAmount()), BigDecimal::add)
+                    ));
+
+            return cars.stream().map(car -> {
+                CarDto dto = modelMapper.map(car, CarDto.class);
+                dto.setTotalExpenses(expensesByCarId.getOrDefault(car.getCarId(), BigDecimal.ZERO));
+                dto.setIsOwner(userId.equals(car.getUserId()) || email.equals(car.getOwner()));
+                return dto;
+            }).toList();
+
+        }).orElseGet(List::of);
     }
 
     public CarEntity getCarById(Long carId) {
         return carRepository.findById(carId).orElseThrow();
+    }
+
+    public void deleteCar(Long id) {
+        carRepository.deleteById(id);
+    }
+
+    public CarEntity updateCar(Long id, CarDto dto) {
+        CarEntity car = carRepository.findById(id)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Car not found: " + id));
+
+        modelMapper.map(dto, car);
+
+        return carRepository.save(car);
     }
 
     // ── External APIs ──────────────────────────────────────────────────────────

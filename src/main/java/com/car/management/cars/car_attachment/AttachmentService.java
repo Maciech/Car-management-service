@@ -1,4 +1,4 @@
-package com.car.management.cars.car_image;
+package com.car.management.cars.car_attachment;
 
 import com.car.management.cars.car.CarRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import lombok.experimental.NonFinal;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,25 +22,20 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ImageService {
+public class AttachmentService {
 
-    ImageRepository imageRepository;
+    AttachmentRepository attachmentRepository;
     CarRepository carRepository;
     ModelMapper modelMapper;
 
-    @NonFinal
-    @Value("${app.backend.url:http://localhost:8080}")
-    String backendUrl;
-
     private static final Path UPLOADS_DIR = Paths.get("uploads");
 
-    public void saveImagesByCarId(Long carId, List<MultipartFile> images) {
-
+    public void saveAttachmentsByCarId(Long carId, List<MultipartFile> files) {
         if (!carRepository.existsById(carId)) {
             throw new EntityNotFoundException("Car not found");
         }
 
-        Path carDir = UPLOADS_DIR.resolve("cars").resolve(carId.toString());
+        Path carDir = UPLOADS_DIR.resolve("attachments").resolve(carId.toString());
 
         try {
             Files.createDirectories(carDir);
@@ -50,12 +43,10 @@ public class ImageService {
             throw new RuntimeException("Cannot create directory: " + carDir, e);
         }
 
-        for (MultipartFile file : images) {
+        for (MultipartFile file : files) {
             String filename = UUID.randomUUID() + "-" + file.getOriginalFilename();
             Path target = carDir.resolve(filename);
-
-            // 🔥 TYLKO RELATYWNA ŚCIEŻKA
-            String url = "cars/" + carId + "/" + filename;
+            String url = "attachments/" + carId + "/" + filename;
 
             try {
                 file.transferTo(target);
@@ -63,33 +54,33 @@ public class ImageService {
                 throw new RuntimeException("Failed to save file", e);
             }
 
-            ImageEntity imageEntity = ImageEntity.builder()
+            AttachmentEntity entity = AttachmentEntity.builder()
                     .carId(carId)
                     .url(url)
-                    .position(0)
+                    .originalName(file.getOriginalFilename())
+                    .mimeType(file.getContentType())
                     .build();
 
-            imageRepository.save(imageEntity);
+            attachmentRepository.save(entity);
         }
     }
 
-    public List<ImageDto> getImagesByCarId(Long carId) {
-        return imageRepository.findAllByCarId(carId).stream()
-                .map(image -> {
-                    ImageDto dto = modelMapper.map(image, ImageDto.class);
-                    dto.setUrl(backendUrl + "/uploads/" + image.getUrl());
+    public List<AttachmentDto> getAttachmentsByCarId(Long carId) {
+        return attachmentRepository.findAllByCarId(carId).stream()
+                .map(a -> {
+                    AttachmentDto dto = modelMapper.map(a, AttachmentDto.class);
+                    dto.setUrl("http://localhost:8080/uploads/" + a.getUrl());
                     return dto;
                 })
                 .toList();
     }
 
     @Transactional
-    public void deleteImageByImageId(Long imageId) {
+    public void deleteAttachment(Long attachmentId) {
+        AttachmentEntity entity = attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Attachment not found"));
 
-        ImageEntity image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new EntityNotFoundException("Image not found"));
-
-        Path filePath = UPLOADS_DIR.resolve(image.getUrl()).normalize();
+        Path filePath = UPLOADS_DIR.resolve(entity.getUrl()).normalize();
 
         if (!filePath.startsWith(UPLOADS_DIR)) {
             throw new SecurityException("Invalid file path");
@@ -98,10 +89,9 @@ public class ImageService {
         try {
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete image file: " + filePath, e);
+            throw new RuntimeException("Failed to delete attachment: " + filePath, e);
         }
 
-        imageRepository.delete(image);
+        attachmentRepository.delete(entity);
     }
 }
-

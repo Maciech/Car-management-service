@@ -1,6 +1,7 @@
 package com.car.management.cars.car;
 
 import com.car.management.cars.car_search.criteria_enums.CarColor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +35,7 @@ public class CarDto {
     CarStatus status;
     String[] images;
     BigDecimal totalExpenses;
+    @JsonProperty("isOwner")
+    Boolean isOwner;
 
 }

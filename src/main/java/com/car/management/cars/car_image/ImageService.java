@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,10 @@ public class ImageService {
     ImageRepository imageRepository;
     CarRepository carRepository;
     ModelMapper modelMapper;
+
+    @NonFinal
+    @Value("${app.backend.url:http://localhost:8080}")
+    String backendUrl;
 
     private static final Path UPLOADS_DIR = Paths.get("uploads");
 
@@ -71,7 +77,7 @@ public class ImageService {
         return imageRepository.findAllByCarId(carId).stream()
                 .map(image -> {
                     ImageDto dto = modelMapper.map(image, ImageDto.class);
-                    dto.setUrl("http://localhost:8080/uploads/" + image.getUrl());
+                    dto.setUrl(backendUrl + "/uploads/" + image.getUrl());
                     return dto;
                 })
                 .toList();

@@ -78,7 +78,10 @@ public class CarService {
     public CarDto createCarRecord(CarDto carDto) {
         CarEntity newCar = modelMapper.map(carDto, CarEntity.class);
         String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
-        userRepository.findByEmail(email).ifPresent(u -> newCar.setUserId(u.getUserId()));
+        userRepository.findByEmail(email).ifPresent(u -> {
+            newCar.setUserId(u.getUserId());
+            newCar.setOwner(u.getEmail());
+        });
         carRepository.save(newCar);
         carDto.setCarId(newCar.getCarId());
         return carDto;
@@ -109,6 +112,7 @@ public class CarService {
             return cars.stream().map(car -> {
                 CarDto dto = modelMapper.map(car, CarDto.class);
                 dto.setTotalExpenses(expensesByCarId.getOrDefault(car.getCarId(), BigDecimal.ZERO));
+                dto.setIsOwner(userId.equals(car.getUserId()) || email.equals(car.getOwner()));
                 return dto;
             }).toList();
 

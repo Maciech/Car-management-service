@@ -47,7 +47,27 @@ public class InvitationService {
     public InvitationDto getByToken(String token) {
         CarInvitationEntity inv = invitationRepository.findByToken(token)
                 .orElseThrow(() -> new EntityNotFoundException("Invitation not found"));
-        return new InvitationDto(inv.getCarId(), inv.getCarName(), inv.getInviteeEmail(), inv.getStatus());
+        return new InvitationDto(inv.getInvitationId(), inv.getCarId(), inv.getCarName(), inv.getInviteeEmail(), inv.getStatus());
+    }
+
+    public List<InvitationDto> getByCarId(Long carId) {
+        return invitationRepository.findAllByCarId(carId).stream()
+                .map(inv -> new InvitationDto(inv.getInvitationId(), inv.getCarId(), inv.getCarName(), inv.getInviteeEmail(), inv.getStatus()))
+                .toList();
+    }
+
+    @Transactional
+    public void resendInvitation(Long invitationId) {
+        CarInvitationEntity inv = invitationRepository.findById(invitationId)
+                .orElseThrow(() -> new EntityNotFoundException("Invitation not found"));
+
+        String newToken = UUID.randomUUID().toString();
+        inv.setToken(newToken);
+        inv.setExpiresAt(LocalDateTime.now().plusDays(7));
+        inv.setStatus(InvitationStatus.PENDING);
+        invitationRepository.save(inv);
+
+        mailService.sendInvitation(inv.getInviteeEmail(), inv.getCarName(), newToken);
     }
 
     @Transactional

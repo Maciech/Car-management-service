@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,6 +28,17 @@ public class InvitationController {
     public ResponseEntity<?> acceptInvitation(@RequestBody Map<String, String> body) {
         String token = body.get("token");
         invitationService.acceptInvitation(token);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/car/{carId}")
+    public ResponseEntity<List<InvitationDto>> getByCarId(@PathVariable Long carId) {
+        return ResponseEntity.ok(invitationService.getByCarId(carId));
+    }
+
+    @PostMapping("/{invitationId}/resend")
+    public ResponseEntity<?> resend(@PathVariable Long invitationId) {
+        invitationService.resendInvitation(invitationId);
         return ResponseEntity.ok().build();
     }
 }

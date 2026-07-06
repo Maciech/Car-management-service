@@ -1,0 +1,102 @@
+/* ══ Dashboard ══ */
+
+.cars-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Section header ── */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── "Wyświetl wszystkie" button ── */
+.show-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.show-all:hover {
+  border-color: var(--primary-accent-border);
+  color: var(--primary-accent);
+  background: var(--primary-accent-glow);
+}
+.show-all:active {
+  transform: translateY(1px);
+}
+
+/* ── Car grid ── */
+.cards.three-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1200px) {
+  .cards.three-cols { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 720px) {
+  .cards.three-cols { grid-template-columns: 1fr; }
+}
+
+/* ── Empty state ── */
+.empty-hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--primary-accent);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-orange);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s;
+  z-index: 90;
+}
+.fab:hover {
+  background: var(--primary-accent-dark);
+  transform: scale(1.07);
+  box-shadow: 0 6px 28px rgba(249, 115, 22, 0.45);
+}
+.fab:active {
+  transform: scale(0.95);
+}

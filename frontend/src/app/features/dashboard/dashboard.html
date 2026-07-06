@@ -1,0 +1,56 @@
+<section class="dashboard">
+
+  <app-stats-section />
+
+  <!-- Aktualnie wystawione -->
+  <section class="cars-section">
+    <header class="section-header">
+      <h2>Aktualnie sprzedawane</h2>
+      <button class="show-all" (click)="showAllListed()">Wyświetl wszystkie →</button>
+    </header>
+    <div class="cards three-cols">
+      @for (car of listedCars(); track car.carId) {
+        <app-car-card [car]="car" [showActions]="true" (changed)="load()" />
+      } @empty {
+        <p class="empty-hint">Brak wystawionych samochodów</p>
+      }
+    </div>
+  </section>
+
+  <!-- Najlepiej sprzedane (wg. % zysku) -->
+  <section class="cars-section">
+    <header class="section-header">
+      <h2>Najlepiej sprzedane</h2>
+      <button class="show-all" (click)="showAllSold()">Wyświetl wszystkie →</button>
+    </header>
+    <div class="cards three-cols">
+      @for (car of bestSoldCars(); track car.carId) {
+        <app-car-card [car]="car" [showActions]="true" (changed)="load()" />
+      } @empty {
+        <p class="empty-hint">Brak sprzedanych samochodów</p>
+      }
+    </div>
+  </section>
+
+  <!-- Gotowe do wystawienia -->
+  <section class="cars-section">
+    <header class="section-header">
+      <h2>Gotowe do wystawienia</h2>
+      <button class="show-all" (click)="showAllReady()">Wyświetl wszystkie →</button>
+    </header>
+    <div class="cards three-cols">
+      @for (car of readyCars(); track car.carId) {
+        <app-car-card [car]="car" [showActions]="true" (changed)="load()" />
+      } @empty {
+        <p class="empty-hint">Brak samochodów ze statusem Gotowe</p>
+      }
+    </div>
+  </section>
+
+</section>
+
+<button class="fab" (click)="openAddCar()">+</button>
+
+@if (showAddCar()) {
+  <app-add-car-modal (close)="closeAddCar()" (added)="onCarAdded()" />
+}

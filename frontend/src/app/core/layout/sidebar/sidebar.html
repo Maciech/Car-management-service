@@ -1,0 +1,39 @@
+<nav class="sidebar" [class.expanded]="expanded()">
+
+  <button class="hamburger" (click)="toggle()">☰</button>
+
+  <div class="nav-links">
+    @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="icon">{{ item.icon }}</span>
+        @if (expanded()) { <span class="label">{{ item.label }}</span> }
+      </a>
+    }
+  </div>
+
+  <div class="sidebar-bottom">
+
+    <button class="search-btn" (click)="openSearch()">
+      <span class="search-icon">🔍</span>
+      @if (expanded()) { <span class="label">Szukaj ogłoszeń</span> }
+    </button>
+
+    <button class="theme-btn" (click)="theme.toggle()">
+      <span class="theme-icon">{{ theme.isDark() ? '☀️' : '🌙' }}</span>
+      @if (expanded()) {
+        <span class="label">{{ theme.isDark() ? 'Jasny motyw' : 'Ciemny motyw' }}</span>
+      }
+    </button>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="logout-icon">🚪</span>
+      @if (expanded()) { <span class="label">Wyloguj</span> }
+    </button>
+
+  </div>
+
+</nav>
+
+@if (showSearch()) {
+  <app-car-search-modal (close)="closeSearch()" />
+}

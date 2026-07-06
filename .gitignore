@@ -34,3 +34,6 @@ build/
 
 # Ignore those files
 **/application-secrets.properties
+secrets.env
+secrets/
+uploads/

@@ -1,0 +1,62 @@
+<div class="invite-wrapper">
+  <div class="invite-card">
+
+    @switch (state()) {
+
+      @case ('loading') {
+        <div class="card-inner">
+          <div class="state-icon">⏳</div>
+          <p>Weryfikowanie zaproszenia...</p>
+        </div>
+      }
+
+      @case ('ready') {
+        <div class="card-inner">
+          <div class="state-icon">🚗</div>
+          <h1>Masz zaproszenie!</h1>
+          @if (invitation(); as inv) {
+            <div class="car-name">{{ inv.carName }}</div>
+            <p class="sub">Zostałeś zaproszony do zarządzania tym pojazdem.</p>
+          }
+          <div class="actions">
+            <a [routerLink]="['/login']" [queryParams]="{token: token()}" class="btn-primary">
+              🔑 Zaloguj się
+            </a>
+            <a [routerLink]="['/register']" [queryParams]="{token: token()}" class="btn-outline">
+              Zarejestruj nowe konto
+            </a>
+          </div>
+        </div>
+      }
+
+      @case ('accepting') {
+        <div class="card-inner">
+          <div class="state-icon">✅</div>
+          <p>Akceptowanie zaproszenia...</p>
+        </div>
+      }
+
+      @case ('accepted') {
+        <div class="card-inner">
+          <div class="state-icon">🎉</div>
+          <h1>Zaproszenie przyjęte!</h1>
+          <p>Pojazd pojawi się na Twoim dashboardzie.</p>
+          <p class="redirect-hint">Przekierowanie za chwilę...</p>
+        </div>
+      }
+
+      @case ('error') {
+        <div class="card-inner">
+          <div class="state-icon">❌</div>
+          <h1>Nieprawidłowe zaproszenie</h1>
+          <p>Link jest nieważny lub wygasł.</p>
+          <div class="actions">
+            <a [routerLink]="['/login']" class="btn-primary">Przejdź do logowania</a>
+          </div>
+        </div>
+      }
+
+    }
+
+  </div>
+</div>

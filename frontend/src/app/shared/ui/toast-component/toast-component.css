@@ -1,0 +1,28 @@
+.toast {
+  position: fixed;
+  bottom: 90px;
+  right: var(--spacing-xl);
+  background: var(--card-bg);
+  color: var(--text-main);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  z-index: 2000;
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--primary-accent);
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 200px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
